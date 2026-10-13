@@ -28,11 +28,6 @@ CREATE TABLE cliente (
     CONSTRAINT pk_cliente PRIMARY KEY (id_cliente)
 ) ENGINE=InnoDB;
 
--- ============================================================
--- 2. FUNCIONARIO (superentidade)
--- SUPERVISIONA é autorrelacionamento: um funcionário pode
--- supervisionar vários; cada funcionário pode ter zero ou um supervisor.
--- ============================================================
 CREATE TABLE funcionario (
     id_funcionario INT NOT NULL,
     nome VARCHAR(100) NOT NULL,
