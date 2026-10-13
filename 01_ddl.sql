@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS oficina_mecanica
 USE oficina_mecanica;
 
 DROP TABLE IF EXISTS movimentacao_estoque;
-DROP TABLE IF EXISTS demanda_peca;
+DROP TABLE IF EXISTS utiliza;
 DROP TABLE IF EXISTS pagamento;
 DROP TABLE IF EXISTS executa;
 DROP TABLE IF EXISTS repositor;
@@ -22,12 +22,14 @@ DROP TABLE IF EXISTS veiculo;
 DROP TABLE IF EXISTS funcionario;
 DROP TABLE IF EXISTS cliente;
 
+-- 1. CLIENTE
 CREATE TABLE cliente (
     id_cliente INT NOT NULL,
     nome VARCHAR(100) NOT NULL,
     CONSTRAINT pk_cliente PRIMARY KEY (id_cliente)
 ) ENGINE=InnoDB;
 
+-- 2. FUNCIONARIO: superentidade e autorrelacionamento SUPERVISIONA
 CREATE TABLE funcionario (
     id_funcionario INT NOT NULL,
     nome VARCHAR(100) NOT NULL,
@@ -41,11 +43,10 @@ CREATE TABLE funcionario (
         REFERENCES funcionario (id_funcionario)
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
-    CONSTRAINT ck_funcionario_supervisor_diferente
-        CHECK (id_supervisor IS NULL OR id_supervisor <> id_funcionario),
     INDEX idx_funcionario_supervisor (id_supervisor)
 ) ENGINE=InnoDB;
 
+-- 3. VEICULO: cada veiculo pertence a um cliente
 CREATE TABLE veiculo (
     placa VARCHAR(10) NOT NULL,
     modelo VARCHAR(100) NOT NULL,
@@ -59,11 +60,11 @@ CREATE TABLE veiculo (
     INDEX idx_veiculo_cliente (id_cliente)
 ) ENGINE=InnoDB;
 
+-- 4. DEMANDA: cada demanda e gerada por um veiculo
 CREATE TABLE demanda (
     id_demanda INT NOT NULL,
     status VARCHAR(20) NOT NULL DEFAULT 'Pendente',
     data_hora_abertura DATETIME NOT NULL,
-    valor_total DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     placa VARCHAR(10) NOT NULL,
     CONSTRAINT pk_demanda PRIMARY KEY (id_demanda),
     CONSTRAINT fk_demanda_veiculo
@@ -73,16 +74,14 @@ CREATE TABLE demanda (
         ON UPDATE CASCADE,
     CONSTRAINT ck_demanda_status
         CHECK (status IN ('Pendente', 'Finalizado')),
-    CONSTRAINT ck_demanda_valor_total
-        CHECK (valor_total >= 0),
     INDEX idx_demanda_placa (placa),
     INDEX idx_demanda_status (status),
     INDEX idx_demanda_data_abertura (data_hora_abertura)
 ) ENGINE=InnoDB;
 
+-- 5. Especializacao de FUNCIONARIO
 CREATE TABLE mecanico (
     id_funcionario INT NOT NULL,
-    especialidade VARCHAR(100) NULL,
     CONSTRAINT pk_mecanico PRIMARY KEY (id_funcionario),
     CONSTRAINT fk_mecanico_funcionario
         FOREIGN KEY (id_funcionario)
@@ -121,6 +120,8 @@ CREATE TABLE repositor (
         ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
+-- 6. EXECUTA: relacionamento N:N DEMANDA x MECANICO
+-- Datas sao atributos do relacionamento.
 CREATE TABLE executa (
     id_demanda INT NOT NULL,
     id_mecanico INT NOT NULL,
@@ -142,19 +143,19 @@ CREATE TABLE executa (
     INDEX idx_executa_mecanico (id_mecanico)
 ) ENGINE=InnoDB;
 
+-- 7. FORMA_PAGAMENTO
 CREATE TABLE forma_pagamento (
     id_forma INT NOT NULL,
-    descricao VARCHAR(50) NOT NULL,
-    CONSTRAINT pk_forma_pagamento PRIMARY KEY (id_forma),
-    CONSTRAINT uq_forma_pagamento_descricao UNIQUE (descricao)
+    CONSTRAINT pk_forma_pagamento PRIMARY KEY (id_forma)
 ) ENGINE=InnoDB;
 
+-- 8. PAGAMENTO: cada pagamento pertence a uma demanda e usa uma forma
 CREATE TABLE pagamento (
     id_pagamento INT NOT NULL,
-    id_demanda INT NOT NULL,
-    id_forma INT NOT NULL,
     valor_pagamento DECIMAL(10,2) NOT NULL,
     data_pagamento DATETIME NOT NULL,
+    id_demanda INT NOT NULL,
+    id_forma INT NOT NULL,
     CONSTRAINT pk_pagamento PRIMARY KEY (id_pagamento),
     CONSTRAINT fk_pagamento_demanda
         FOREIGN KEY (id_demanda)
@@ -173,17 +174,16 @@ CREATE TABLE pagamento (
     INDEX idx_pagamento_data (data_pagamento)
 ) ENGINE=InnoDB;
 
+-- 9. CATEGORIA
 CREATE TABLE categoria (
     id_categoria INT NOT NULL,
-    nome VARCHAR(100) NOT NULL,
-    descricao VARCHAR(255) NULL,
-    CONSTRAINT pk_categoria PRIMARY KEY (id_categoria),
-    CONSTRAINT uq_categoria_nome UNIQUE (nome)
+    CONSTRAINT pk_categoria PRIMARY KEY (id_categoria)
 ) ENGINE=InnoDB;
 
+-- 10. ITEM_ESTOQUE
 CREATE TABLE item_estoque (
     id_item INT NOT NULL,
-    situacao VARCHAR(30) NOT NULL,
+    status VARCHAR(30) NOT NULL,
     id_categoria INT NOT NULL,
     CONSTRAINT pk_item_estoque PRIMARY KEY (id_item),
     CONSTRAINT fk_item_estoque_categoria
@@ -191,16 +191,14 @@ CREATE TABLE item_estoque (
         REFERENCES categoria (id_categoria)
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
-    CONSTRAINT ck_item_estoque_situacao
-        CHECK (situacao IN ('Novo', 'Seminovo', 'Recondicionado')),
-    INDEX idx_item_estoque_categoria (id_categoria),
-    INDEX idx_item_estoque_situacao (situacao)
+    INDEX idx_item_estoque_status (status),
+    INDEX idx_item_estoque_categoria (id_categoria)
 ) ENGINE=InnoDB;
 
+-- 11. Especializacao de ITEM_ESTOQUE
 CREATE TABLE peca (
     id_item INT NOT NULL,
     qtd_estoque INT NOT NULL DEFAULT 0,
-    descricao VARCHAR(255) NULL,
     CONSTRAINT pk_peca PRIMARY KEY (id_item),
     CONSTRAINT fk_peca_item_estoque
         FOREIGN KEY (id_item)
@@ -223,32 +221,35 @@ CREATE TABLE equipamento (
         ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE demanda_peca (
+-- 12. UTILIZA: relacionamento N:N DEMANDA x PECA, com quantidade
+CREATE TABLE utiliza (
     id_demanda INT NOT NULL,
     id_peca INT NOT NULL,
     quantidade INT NOT NULL,
-    CONSTRAINT pk_demanda_peca PRIMARY KEY (id_demanda, id_peca),
-    CONSTRAINT fk_demanda_peca_demanda
+    CONSTRAINT pk_utiliza PRIMARY KEY (id_demanda, id_peca),
+    CONSTRAINT fk_utiliza_demanda
         FOREIGN KEY (id_demanda)
         REFERENCES demanda (id_demanda)
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT fk_demanda_peca_peca
+    CONSTRAINT fk_utiliza_peca
         FOREIGN KEY (id_peca)
         REFERENCES peca (id_item)
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
-    CONSTRAINT ck_demanda_peca_quantidade
+    CONSTRAINT ck_utiliza_quantidade
         CHECK (quantidade > 0),
-    INDEX idx_demanda_peca_peca (id_peca)
+    INDEX idx_utiliza_peca (id_peca)
 ) ENGINE=InnoDB;
 
+-- 13. MOVIMENTACAO_ESTOQUE: entidade fraca identificada por
+-- (id_item, id_mov). Datas mantidas como atributos do MER.
 CREATE TABLE movimentacao_estoque (
     id_item INT NOT NULL,
     id_mov INT NOT NULL,
+    data_entrada DATETIME NULL,
+    data_saida DATETIME NULL,
     id_repositor INT NOT NULL,
-    data_entrada DATETIME NOT NULL,
-    data_saida DATETIME NOT NULL,
     CONSTRAINT pk_movimentacao_estoque PRIMARY KEY (id_item, id_mov),
     CONSTRAINT fk_movimentacao_item
         FOREIGN KEY (id_item)
@@ -260,9 +261,17 @@ CREATE TABLE movimentacao_estoque (
         REFERENCES repositor (id_funcionario)
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
+    CONSTRAINT ck_movimentacao_tem_data
+        CHECK (data_entrada IS NOT NULL OR data_saida IS NOT NULL),
     CONSTRAINT ck_movimentacao_datas
-        CHECK (data_saida >= data_entrada),
+        CHECK (
+            data_entrada IS NULL
+            OR data_saida IS NULL
+            OR data_saida >= data_entrada
+        ),
     INDEX idx_movimentacao_repositor (id_repositor),
     INDEX idx_movimentacao_data_entrada (data_entrada),
     INDEX idx_movimentacao_data_saida (data_saida)
 ) ENGINE=InnoDB;
+
+-- FIM DO DDL
