@@ -24,14 +24,14 @@ DROP TABLE IF EXISTS cliente;
 
 -- 1. CLIENTE
 CREATE TABLE cliente (
-    id_cliente INT NOT NULL,
+    id_cliente INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     CONSTRAINT pk_cliente PRIMARY KEY (id_cliente)
 ) ENGINE=InnoDB;
 
 -- 2. FUNCIONARIO: superentidade e autorrelacionamento SUPERVISIONA
 CREATE TABLE funcionario (
-    id_funcionario INT NOT NULL,
+    id_funcionario INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     cpf VARCHAR(14) NOT NULL,
     data_admissao DATE NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE veiculo (
 
 -- 4. DEMANDA: cada demanda e gerada por um veiculo
 CREATE TABLE demanda (
-    id_demanda INT NOT NULL,
+    id_demanda INT NOT NULL AUTO_INCREMENT,
     status VARCHAR(20) NOT NULL DEFAULT 'Pendente',
     data_hora_abertura DATETIME NOT NULL,
     placa VARCHAR(10) NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE forma_pagamento (
 
 -- 8. PAGAMENTO: cada pagamento pertence a uma demanda e usa uma forma
 CREATE TABLE pagamento (
-    id_pagamento INT NOT NULL,
+    id_pagamento INT NOT NULL AUTO_INCREMENT,
     valor_pagamento DECIMAL(10,2) NOT NULL,
     data_pagamento DATETIME NOT NULL,
     id_demanda INT NOT NULL,
@@ -176,7 +176,7 @@ CREATE TABLE pagamento (
 
 -- 9. CATEGORIA
 CREATE TABLE categoria (
-    id_categoria INT NOT NULL,
+    id_categoria INT NOT NULL AUTO_INCREMENT,
     CONSTRAINT pk_categoria PRIMARY KEY (id_categoria)
 ) ENGINE=InnoDB;
 
