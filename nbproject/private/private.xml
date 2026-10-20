@@ -3,7 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Asus/Documents/OficinaDF/src/br/com/OficinaDF/Main.java</file>
+            <file>file:/C:/Users/Asus/Documents/OficinaDF/src/br/com/visao/CategoriaVisao.java</file>
+            <file>file:/C:/Users/Asus/Documents/OficinaDF/src/br/com/visao/ClienteVisao.java</file>
+            <file>file:/C:/Users/Asus/Documents/OficinaDF/src/br/com/visao/FuncionarioVisao.java</file>
+            <file>file:/C:/Users/Asus/Documents/OficinaDF/src/br/com/visao/MenuPrincipal.java</file>
+            <file>file:/C:/Users/Asus/Documents/OficinaDF/src/br/com/visao/VeiculoVisao.java</file>
         </group>
     </open-files>
 </project-private>
