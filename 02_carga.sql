@@ -181,7 +181,7 @@ INSERT INTO demanda (id_demanda, status, data_hora_abertura, placa) VALUES
 (40,'Pendente',     '2025-09-10 14:05:00', 'UJM5U67');
 
 
-INSERT INTO forma_pagamento (id_forma) VALUES (1),(2),(3),(4);
+INSERT INTO forma_pagamento (id_forma) VALUES (1),(2),(3),(4),(5);
 
 
 INSERT INTO pagamento (id_pagamento, valor_pagamento, data_pagamento, id_demanda, id_forma) VALUES
