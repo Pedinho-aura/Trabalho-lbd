@@ -274,4 +274,44 @@ CREATE TABLE movimentacao_estoque (
     INDEX idx_movimentacao_data_saida (data_saida)
 ) ENGINE=InnoDB;
 
+CREATE TABLE auditoria_pagamento (
+    id_auditoria INT NOT NULL AUTO_INCREMENT,
+    acao VARCHAR(10) NOT NULL,
+    usuario VARCHAR(100) NOT NULL,
+    data_hora DATETIME NOT NULL,
+    id_pagamento INT NOT NULL,
+    id_demanda INT NOT NULL,
+    valor_antigo DECIMAL(10,2) NULL,
+    valor_novo DECIMAL(10,2) NULL,
+    CONSTRAINT pk_auditoria_pagamento PRIMARY KEY (id_auditoria)
+) ENGINE=InnoDB;
+
+DELIMITER //
+CREATE TRIGGER trg_pagamento_auditoria_update
+AFTER UPDATE ON pagamento
+FOR EACH ROW
+BEGIN
+
+    IF OLD.valor_pagamento <> NEW.valor_pagamento THEN
+	INSERT INTO auditoria_pagamento
+	   (acao, usuario, data_hora, id_pagamento, id_demanda, valor_antigo, valor_novo)
+	VALUES
+	   ('UPDATE', USER(), NOW(), OLD.id_pagamento, OLD.id_demanda,
+	OLD.valor_pagamento, NEW.valor_pagamento);
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER trg_pagamento_auditoria_delete
+AFTER DELETE ON pagamento
+FOR EACH ROW
+BEGIN
+    INSERT INTO auditoria_pagamento
+	  (acao, usuario, data_hora, id_pagamento, id_demanda, valor_antigo, valor_novo)
+    VALUES
+	  ('DELETE', USER(), NOW(), OLD.id_pagamento, OLD.id_demanda,
+	OLD.valor_pagamento, NULL);
+END //
+DELIMITER ;
 -- FIM DO DDL
