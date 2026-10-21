@@ -1,4 +1,4 @@
-USE oficina_mecanica;
+USE oficinadf;
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE movimentacao_estoque;
