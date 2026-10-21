@@ -276,17 +276,6 @@ CREATE TABLE movimentacao_estoque (
     INDEX idx_movimentacao_data_saida (data_saida)
 ) ENGINE=InnoDB;
 
-CREATE TABLE auditoria_cliente (
-    id_auditoria INT NOT NULL AUTO_INCREMENT,
-    acao VARCHAR(10) NOT NULL,            
-    usuario VARCHAR(100) NOT NULL,      
-    data_hora DATETIME NOT NULL,          
-    id_cliente INT NOT NULL,
-    nome_antigo VARCHAR(100) NULL,
-    nome_novo VARCHAR(100) NULL,
-    CONSTRAINT pk_auditoria_cliente PRIMARY KEY (id_auditoria)
-) ENGINE=InnoDB;
-
 
 CREATE TABLE auditoria_pagamento (
     id_auditoria INT NOT NULL AUTO_INCREMENT,
