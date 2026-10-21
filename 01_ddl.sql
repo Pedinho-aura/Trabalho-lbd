@@ -11,7 +11,7 @@ DROP TRIGGER IF EXISTS trg_pagamento_auditoria_delete;
 DROP TABLE IF EXISTS movimentacao_estoque;
 
 -- Remover tabela de auditoria existente
-DROP TABLE IF EXISTS auditoria_pagamento
+DROP TABLE IF EXISTS auditoria_pagamento;
 
 -- Remover tabelas operacionais
 DROP TABLE IF EXISTS utiliza;
