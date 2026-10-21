@@ -1,8 +1,8 @@
-CREATE DATABASE IF NOT EXISTS oficina_mecanica
+CREATE DATABASE IF NOT EXISTS oficinadf
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
-USE oficina_mecanica;
+USE oficinadf;
 
 DROP TABLE IF EXISTS movimentacao_estoque;
 DROP TABLE IF EXISTS utiliza;
