@@ -4,7 +4,16 @@ CREATE DATABASE IF NOT EXISTS oficinadf
 
 USE oficinadf;
 
+-- Remover triggers existentes antes da recriacao
+DROP TRIGGER IF EXISTS trg_pagamento_auditoria_update;
+DROP TRIGGER IF EXISTS trg_pagamento_auditoria_delete;
+
 DROP TABLE IF EXISTS movimentacao_estoque;
+
+-- Remover tabela de auditoria existente
+DROP TABLE IF EXISTS auditoria_pagamento
+
+-- Remover tabelas operacionais
 DROP TABLE IF EXISTS utiliza;
 DROP TABLE IF EXISTS pagamento;
 DROP TABLE IF EXISTS executa;
