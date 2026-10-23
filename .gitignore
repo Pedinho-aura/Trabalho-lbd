@@ -1,0 +1,15 @@
+
+# Configurações e credenciais locais
+/config.properties
+
+# Arquivos compilados e temporários
+/build/
+/dist/
+/*.class
+
+# Configurações locais de IDE
+/.idea/
+*.iml
+
+# Logs
+*.log
