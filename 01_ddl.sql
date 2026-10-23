@@ -323,4 +323,6 @@ BEGIN
 	OLD.valor_pagamento, NULL);
 END //
 DELIMITER ;
+
+SELECT * FROM auditoria_pagamento;
 -- FIM DO DDL
