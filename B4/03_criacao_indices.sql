@@ -1,4 +1,3 @@
-
 -- OFICINADF - B4: OTIMIZACAO DE CONSULTAS
 -- OBJETIVO: Criar indices compostos para avaliar melhorias nos planos de execucao.
 
@@ -34,4 +33,3 @@ ON pagamento (id_demanda, data_pagamento);
 
 CREATE INDEX idx_b4_movimentacao_item_data
 ON movimentacao_estoque (id_item, data_entrada);
-
