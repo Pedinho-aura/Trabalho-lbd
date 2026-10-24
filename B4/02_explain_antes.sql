@@ -1,6 +1,6 @@
-
 -- OFICINADF - B4: OTIMIZACAO DE CONSULTAS
 -- OBJETIVO: Registrar os planos e tempos de execucao antes da criacao dos indices compostos.
+
 
 USE oficinadf;
 
@@ -103,4 +103,3 @@ WHERE id_item = @item_teste
   AND data_entrada >= '2020-01-01'
   AND data_entrada < '2030-01-01'
 ORDER BY data_entrada;
-
