@@ -159,8 +159,27 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 ON oficinadf.pagamento
 TO 'oficinadf_app'@'localhost';
 
+-- 4.6 ESTOQUES
 
--- 4.6 USUARIOS DA APLICACAO
+GRANT SELECT ON oficinadf.item_estoque
+TO 'oficinadf_app'@'localhost';
+
+-- 4.7 PEÇAS
+
+GRANT SELECT ON oficinadf.peca
+TO 'oficinadf_app'@'localhost';
+
+-- 4.8 MOVIMENTAÇÃO DO ESTOQUE
+
+GRANT SELECT ON oficinadf.movimentacao_estoque
+TO 'oficinadf_app'@'localhost';
+
+-- 4.9 UTILIZA
+
+GRANT SELECT, INSERT, UPDATE ON oficinadf.utiliza
+TO 'oficinadf_app'@'localhost';
+
+-- 4.9 USUARIOS DA APLICACAO
 
 -- Permite cadastrar usuarios e consultar credenciais.
 -- Nao concede acesso para excluir usuarios ou
@@ -180,6 +199,15 @@ GRANT SELECT
 ON oficinadf.vw_consulta_demandas
 TO 'oficinadf_app'@'localhost';
 
+-- 4.8 Permissão para a tela de registrar utilização de peças
+
+GRANT SELECT, UPDATE
+ON oficinadf.peca
+TO 'oficinadf_app'@'localhost';
+
+GRANT SELECT, INSERT, UPDATE
+ON oficinadf.utiliza
+TO 'oficinadf_app'@'localhost';
 
 -- 5. VERIFICACAO DOS PERFIS E USUARIOS MYSQL
 
@@ -203,6 +231,42 @@ SHOW GRANTS FOR 'oficinadf_app'@'localhost';
 
 
 -- 6. VERIFICACAO DAS CREDENCIAIS DA APLICACAO
+
+-- 6.1 Primeiro Usuário para interação com o aplicativo:
+
+INSERT INTO usuario_sistema (
+    login,
+    senha_hash,
+    senha_salt,
+    iteracoes,
+    ativo,
+    perfil
+)
+VALUES (
+    'PrimeiroAdmin',
+    UNHEX('AE040090987836A3362D467E5099FE9F8558B259104F6D121292657DFA8B2D45'),
+    UNHEX('31F5DFB1D77D633907A81FDF7A4B41AD'),
+    210000,
+    TRUE,
+    'ADMINISTRADOR'
+)
+ON DUPLICATE KEY UPDATE
+    login = login;
+    
+    -- SENHA : Senha123
+
+-- Verificar cadastro inicial
+
+SELECT
+    id_usuario,
+    login,
+    perfil,
+    ativo,
+    LENGTH(senha_hash) AS tamanho_hash,
+    LENGTH(senha_salt) AS tamanho_salt,
+    iteracoes
+FROM usuario_sistema
+WHERE login = 'PrimeiroAdmin';
 
 -- Listar usuarios cadastrados pelo Java.
 -- Em uma instalacao nova, pode retornar zero linhas.
@@ -229,7 +293,4 @@ SELECT
     ativo
 FROM usuario_sistema;
 
-
-
 -- FIM DO SCRIPT 02 - SEGURANCA B5
-
