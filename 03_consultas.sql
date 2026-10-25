@@ -199,7 +199,7 @@ WHERE (
 ORDER BY c.nome;
 
 
--- 14. Gerentes responsáveis por mais de uma demanda
+-- 14. Mecânicos responsáveis por mais de uma demanda
 -- Utiliza JOIN, GROUP BY e HAVING para responder
 -- a uma questão de negócio.
 
@@ -252,3 +252,16 @@ HAVING SUM(p.valor_pagamento) = (
         GROUP BY c2.id_cliente
     ) AS totais
 );
+
+
+-- Utiliza IS NULL.
+
+SELECT
+    e.id_demanda,
+    f.nome AS mecanico,
+    e.data_hora_inicio
+FROM executa e
+INNER JOIN funcionario f
+    ON e.id_mecanico = f.id_funcionario
+WHERE e.data_hora_fim IS NULL
+ORDER BY e.data_hora_inicio;
