@@ -55,6 +55,14 @@ INSERT INTO veiculo (placa, modelo, id_cliente) VALUES
 ('EDC1A23','Toyota Hilux SRX',24),('EDC2B34','Ford Ranger XLT',25),
 ('RFV3C45','Volkswagen Saveiro Cross',26),('RFV4D56','Fiat Toro Volcano',27);
 
+-- Veiculos adicionais (ampliar para 40 registros)
+INSERT INTO veiculo (placa, modelo, id_cliente) VALUES
+('PLK1A11','Fiat Uno Attractive',28),('PLK2B22','Chevrolet Celta LS',29),
+('PLK3C33','Volkswagen Voyage 1.6',30),('PLK4D44','Hyundai i30 GLS',31),
+('PLK5E55','Honda HR-V EX',32),('PLK6F66','Toyota Corolla Cross XRE',33),
+('PLK7G77','Renault Duster Dynamique',34),('PLK8H88','Ford Fiesta SE 1.6',35),
+('PLK9I99','Jeep Compass Longitude',36),('PLK0J00','Nissan Versa Sense',37);
+
 
 INSERT INTO funcionario (id_funcionario, nome, cpf, data_admissao, id_supervisor) VALUES
 (1,'Roberto Salles Miranda','181.114.111-01','2018-03-12', NULL),
@@ -204,6 +212,12 @@ INSERT INTO pagamento (id_pagamento, valor_pagamento, data_pagamento, id_demanda
 (33,690.00,'2024-11-03',31,5),(34,245.00,'2024-11-12',32,1),
 (35,410.00,'2024-11-20',33,2);
 
+-- Pagamentos adicionais (ampliar para 40 registros)
+INSERT INTO pagamento (id_pagamento, valor_pagamento, data_pagamento, id_demanda, id_forma) VALUES
+(36,520.00,'2024-12-04',34,3),(37,310.00,'2024-12-12',35,1),
+(38,150.00,'2024-03-06',7,2),(39,98.50,'2024-04-12',11,1),
+(40,720.00,'2024-05-14',14,3);
+
 
 INSERT INTO executa (id_demanda, id_mecanico, data_hora_inicio, data_hora_fim) VALUES
 (1,6,'2024-01-08 09:30:00','2024-01-08 11:00:00'),
@@ -316,6 +330,10 @@ INSERT INTO movimentacao_estoque (id_item, id_mov, data_entrada, data_saida, id_
 (45,2,NULL,'2025-02-24 13:30:00',34),(46,1,'2025-03-01 09:20:00',NULL,35),
 (46,2,NULL,'2025-03-05 16:10:00',35),(47,1,'2025-03-10 08:05:00',NULL,34),
 (47,2,NULL,'2025-03-14 14:40:00',34),(48,1,'2025-03-20 09:25:00',NULL,35),
+(48,2,NULL,'2025-03-24 15:15:00',35),(2,4,'2025-04-01 08:30:00',NULL,34),
+(2,5,NULL,'2025-04-05 13:45:00',34),(7,3,'2025-04-10 09:10:00',NULL,35),
+(7,4,NULL,'2025-04-14 15:35:00',35),(10,3,'2025-05-01 08:55:00',NULL,34),
+(10,4,NULL,'2025-05-05 14:20:00',34),(15,4,'2025-05-10 09:05:00',NULL,35);
 (48,2,NULL,'2025-03-24 15:15:00',35),(2,4,'2025-04-01 08:30:00',NULL,34),
 (2,5,NULL,'2025-04-05 13:45:00',34),(7,3,'2025-04-10 09:10:00',NULL,35),
 (7,4,NULL,'2025-04-14 15:35:00',35),(10,3,'2025-05-01 08:55:00',NULL,34),
